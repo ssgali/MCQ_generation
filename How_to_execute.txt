@@ -20,7 +20,7 @@ Run the Following Commands:
 7.) In order to check if cuda is successfully installed, in other words your model can use your gpu, simply run python gpu.py, if it shows your graphic card model, then
     you are good to go.
 
-8.) To generate desired number of MCQs go to mcq_generator.py,then in def get_nouns_multipartite(content): set the value of "no_of_mcqs=" your own choice.
+8.) To generate desired number of MCQs go to mcq_generator.py,then in def get_nouns_multipartite(content): set the value of "n=" your own choice.
 
 Further Improvements (For any particular subject e.g Computer, Physics etc ):
 

@@ -95,7 +95,7 @@ def get_nouns_multipartite(content):
         extractor.candidate_weighting(alpha=1.1, threshold=0.75, method="average")
 
         # Increase the number of keywords extracted
-        keyphrases = extractor.get_n_best(no_of_mcqs=50)  # Increase n to 50 or more to generate more MCQs
+        keyphrases = extractor.get_n_best(n=50)  # Increase n to 50 or more to generate more MCQs
 
         for val in keyphrases:
             out.append(val[0])
