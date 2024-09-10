@@ -1,0 +1,39 @@
+Recommended Version of Python: 3.12.4
+
+Run the Following Commands:
+
+1.) python setup_script.py (To download sense2vec_2015 and then the script will also extract it in the same folder)
+
+2.) python -m spacy download en_core_web_sm
+
+3.) pip install -r requirements.txt
+
+4.) Lastly Execute "python main.py Sample.pdf" where Sample is the file which contains the text from which it will generate MCQs. During first time execution of this file
+    it will download t5 models and some nltk files, you can take a peek in model_downloader.py
+
+5.) mcq_generator.py is the main file which has all the code, you can take a look and have a good understanding at how it works and generate mcqs from a paragraph.
+
+6.) Additionally you can also setup cuda functionality if you want to use gpu functionality, depending on the version of cuda installed on your computer, go to pytorch.org
+    and select the requirements and execute the command which shows after selecting your desired fields.For me it was something like this, version varies:
+    "pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124"
+
+7.) In order to check if cuda is successfully installed, in other words your model can use your gpu, simply run python gpu.py, if it shows your graphic card model, then
+    you are good to go.
+
+8.) To generate desired number of MCQs go to mcq_generator.py,then in def get_nouns_multipartite(content): set the value of "no_of_mcqs=" your own choice.
+
+Further Improvements (For any particular subject e.g Computer, Physics etc ):
+
+	The model needs to be finetuned for computer science specific field in order to generate more precise and more meaningful MCQs. It can be finetuned from the datasets 
+	available on huggingface, or you can use different models such as flan t5 small or BERT for better results.
+
+	The distractors produced also needs to be checked that they are related to computer specific field.
+	
+	The better the training the better the results.
+
+	Any confusion or queries or any further improvements feel free to let me know or open a discussion.
+
+Thanks
+
+
+
