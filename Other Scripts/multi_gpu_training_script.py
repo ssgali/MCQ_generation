@@ -34,7 +34,7 @@ OUTPUT_DIR ="model_training"
 device_index = Accelerator().process_index
 device_map = {"": device_index}
 
-login("os.getenv("hf_token")")
+login(os.getenv("hf_token"))
 
 # Define your saved path
 model_path = "meta-llama/Llama-3.2-1B-Instruct"
@@ -153,7 +153,7 @@ if __name__ == "__main__":
     merged_model.save_pretrained(FINAL_LOCAL_MODEL_DIR)
     tokenizer.save_pretrained(FINAL_LOCAL_MODEL_DIR)
 
-    login("os.getenv("hf_token")")
+    login(os.getenv("hf_token"))
 
-    merged_model.push_to_hub("sinister007/llama-3.2-1b-mcq-gen",token="os.getenv("hf_token")")
-    tokenizer.push_to_hub("sinister007/llama-3.2-1b-mcq-gen",token="os.getenv("hf_token")")
+    merged_model.push_to_hub("sinister007/llama-3.2-1b-mcq-gen",token=os.getenv("hf_token"))
+    tokenizer.push_to_hub("sinister007/llama-3.2-1b-mcq-gen",token=os.getenv("hf_token"))
