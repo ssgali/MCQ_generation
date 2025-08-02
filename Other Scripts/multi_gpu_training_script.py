@@ -17,6 +17,12 @@ import random
 from accelerate import Accelerator
 from huggingface_hub import login
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
 SEED = 42
 
 def seed_everything(seed: int):
