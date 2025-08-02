@@ -1,19 +1,13 @@
-from pypdf import PdfReader
-import re
-import sys
+import fitz  # PyMuPDF
 
-def text_getter(name):
-    text = """"""
-    try:
-        reader = PdfReader(name)
-        for i in range(len(reader.pages)):
-            page = reader.pages[i]
-            text = text + page.extract_text()
-            text = re.sub(r'\d+$', '', text)
+def extract_text_from_pdf(pdf_path):
+    if pdf_path == "":
+        return ""
+    try: 
+        text = ""
+        doc = fitz.open(pdf_path)  # ← direct path input
+        for page in doc:
+            text += page.get_text()
         return text
-    
-    except FileNotFoundError:
-        print("Please Provide a valid FileName")
-        sys.exit()
-
-     
+    except Exception as e:
+        return ""

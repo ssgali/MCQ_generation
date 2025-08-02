@@ -1,55 +1,100 @@
-## Installation guide
 
-### Creating a virtual environment *(optional)*
-To avoid any conflicts with python packages from other projects, it is a good practice to create a [virtual environment](https://docs.python.org/3/library/venv.html) in which the packages will be installed. 
-If you do not want to this you can skip the next commands and directly follow the How_to_execute file. 
+# Local MCQ Generation Chatbot
 
-Create a virtual environment :
+This project is a **streamlit-based chatbot interface** built on top of a **fine-tuned LLaMA 3.2B model**, designed to generate **high-quality multiple-choice questions (MCQs)** from user prompts and a given PDF documents. The model is fine-tuned specifically to target **Computer Science education** use cases and provides responses in a well-formatted, exam-style MCQ format.
 
-    python -m venv venv
+---
 
-Enter the virtual environment:
+## Features
 
-*Windows:*
+- **Locally hosted LLM (LLaMA 3.2B fine-tuned)** for fast, private inference.
+- **ChatGPT-like frontend using Streamlit**, with left-right conversational UI.
+- **PDF upload support**: You can attach a document and generate MCQs based on its contents.
+- **Streaming response**: Output is streamed character-by-character for better user experience.
+- **Lazy model loading**: Shows a loading screen while the model initializes, avoiding UI freeze.
+- **Custom MCQ generation format** based on user prompt and document context.
 
-    . .\venv\Scripts\activate
+---
 
-*Linux or MacOS*
+## Usage
 
-    source .\venv\Scripts\activate
+### 1. Clone the Repository
 
+```bash
+git clone https://github.com/your-username/local-mcq-chatbot.git
+cd local-mcq-chatbot
+```
 
-Clone the repository :
+### 2. Setup Virtual Environment
 
-    git clone https://github.com/ssgali/MCQ_generation.git
+```bash
+python -m venv mcq_gen
+source mcq_gen/bin/activate     # On Windows: mcq_gen\Scripts\activate
+```
 
-### How to execute:
+### 3. Install Requirements
 
-Recommended Version of Python: 3.12.4
+```bash
+pip install -r requirements.txt
+```
 
-Run the Following Commands:
+### 4. Create `.env` File
 
-- `pip install -r requirements.txt`
+Inside your root directory, create a `.env` file and add:
 
-- `python -m spacy download en_core_web_sm`
+```env
+hf_token=your_huggingface_access_token
+```
 
-- `python setup_script.py` (To download sense2vec_2015 and then the script will also extract it in the same folder)
+### 5. Run the App
 
-- Lastly Execute `python main.py Sample.pdf` where Sample is the file which contains the text from which it will generate MCQs. During first time execution of this file
-    it will download t5 models and some nltk files, you can take a peek in model_downloader.py
+```bash
+streamlit run main.py
+```
 
-- mcq_generator.py is the main file which has all the code, you can take a look and have a good understanding at how it works and generate mcqs from a paragraph.
+---
 
-- Additionally you can also setup cuda functionality if you want to use gpu functionality, depending on the version of cuda installed on your computer, go to pytorch.org
-    and select the requirements and execute the command which shows after selecting your desired fields.For me it was something like this, version varies:
-    `pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124`
+##  Model Info
 
-- In order to check if cuda is successfully installed, in other words your model can use your gpu, simply run `python gpu.py`, if it shows your graphic card model, then
-    you are good to go.
+* Model: [`sinister007/llama-3.2-1b-mcq-gen`](https://huggingface.co/sinister007/llama-3.2-1b-mcq-gen)
+* Fine-tuned on: Hand-curated MCQ-style datasets focused on Computer Science.
+* Format follows:
 
-- To generate desired number of MCQs go to mcq_generator.py, then in def get_nouns_multipartite(content): set the value of "n=" your own choice.
+  ```
+  Question: ...
+  A. ...
+  B. ...
+  C. ...
+  D. ...
+  Answer: X
+  ```
 
-Further Improvements (For any particular subject e.g Computer, Physics etc ):
+---
 
-> The model needs to be finetuned for computer science specific field in order to generate more precise and more meaningful MCQs. It can be finetuned from the datasets available on huggingface, or you can use different models such as flan t5 small or BERT for better results. The distractors produced also needs to be checked that they are related to computer specific field. The better the training the better the results.
+## Example Use
 
+* Ask: `Generate MCQs on Operating System deadlock concepts.`
+* Upload: A PDF textbook or lecture note.
+* Get: A list of 3–5 well-formed, challenging MCQs generated in real time.
+
+---
+
+## Project Structure
+
+```
+.
+├── frontend.py              # Streamlit UI
+├── inference.py             # Model loading and generation
+├── text_extracter.py        # PDF text extraction logic
+├── requirements.txt
+└── .env                     # Environment variables (not committed)
+```
+
+---
+
+## Roadmap
+
+* Further fine-tune the model on a richer, domain-specific dataset.
+* Integrate retrieval-based augmentation (RAG) for better factual grounding.
+* Add support for answer explanations and difficulty tagging.
+* Export MCQs as JSON or PDF.
