@@ -1,5 +1,5 @@
 /Dataset/
 /mcq_gen/
-/Offline Model/
+/model/
 .env
 /__pycache__/

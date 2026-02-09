@@ -142,5 +142,5 @@ if __name__ == "__main__":
     model = model.merge_and_unload()
     trainer.save_model(NEW_MODEL)
     # Push to hub
-    model.push_to_hub("sinister007/llama-3.2-1b-mcq-gen",token=os.getenv("hf_token"))
-    tokenizer.push_to_hub("sinister007/llama-3.2-1b-mcq-gen",token=os.getenv("hf_token"))
+    model.push_to_hub("sinister007/llama-3.2-1b-mcq-gen",token=os.getenv("HF_TOKEN"))
+    tokenizer.push_to_hub("sinister007/llama-3.2-1b-mcq-gen",token=os.getenv("HF_TOKEN"))

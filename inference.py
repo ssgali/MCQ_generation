@@ -6,9 +6,9 @@ import torch
 
 load_dotenv()
 
-hf_token = os.getenv("hf_token")
-if hf_token:
-    login(hf_token)
+HF_TOKEN = os.getenv("HF_TOKEN")
+if HF_TOKEN:
+    login(HF_TOKEN)
 
 LOAD_DIR = os.getenv("model_dir")
 if not LOAD_DIR:
