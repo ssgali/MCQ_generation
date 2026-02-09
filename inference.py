@@ -1,21 +1,22 @@
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from huggingface_hub import login
-import torch
 
 import os
 from dotenv import load_dotenv
+import torch
 
 load_dotenv()
 
 # Access the environment variables
 login(os.getenv("hf_token"))
 
-base_model = "sinister007/llama-3.2-1b-mcq-gen"
+LOAD_DIR = os.getenv("model_dir")
 SEQ_LENGTH = 3000
 TEMP = 0.6
+device = "cuda" if torch.cuda.is_available() else "cpu"
 
-tokenizer = AutoTokenizer.from_pretrained(base_model)
-model = AutoModelForCausalLM.from_pretrained(base_model, device_map="cuda")
+tokenizer = AutoTokenizer.from_pretrained(LOAD_DIR)
+model = AutoModelForCausalLM.from_pretrained(LOAD_DIR, device_map=device)
 
 
 def format_prompt(prompt):
