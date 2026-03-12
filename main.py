@@ -24,12 +24,12 @@ def prompt_llm_stream(user_prompt, pdf_file=None):
 
 
 def main():
-    st.set_page_config(page_title="💬 Local LLM Chatbot", layout="wide")
-    st.title("💬 Local LLM Chatbot")
+    st.set_page_config(page_title=" Local LLM Chatbot", layout="wide")
+    st.title(" Local LLM Chatbot")
 
     # Show loading page once
     if not st.session_state.model_loaded:
-        with st.spinner("🔧 Loading the LLM model... Please wait."):
+        with st.spinner(" Loading the LLM model... Please wait."):
             time.sleep(1.5)  # Optional: fake delay for smooth UI
             import inference
             st.session_state.model_loaded = True
@@ -40,7 +40,7 @@ def main():
             SystemMessage(content=f"How can I help you today ?")
         ]
 
-    st.sidebar.header("📄 Upload a PDF")
+    st.sidebar.header(" Upload a PDF")
     uploaded_file = st.sidebar.file_uploader("Upload your PDF file", type=["pdf"])
 
     for message in st.session_state.messages:

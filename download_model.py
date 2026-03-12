@@ -16,7 +16,9 @@ print(f"Downloading model: {MODEL_ID}")
 print(f"Saving to: {MODEL_DIR}")
 
 tokenizer = AutoTokenizer.from_pretrained(
-    MODEL_ID
+    MODEL_ID,
+    use_fast=False
+    
 )
 
 model = AutoModelForCausalLM.from_pretrained(
