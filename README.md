@@ -57,11 +57,11 @@ cp .env.example .env
 
 ```env
 HF_TOKEN=your_huggingface_token_here
+MODEL_DIR=model\llama-3.2-1b-mcq-gen
 MODEL_ID=sinister007/llama-3.2-1B-mcq-gen-finetuned
-MODEL_DIR=model/llama-3.2-1b-mcq-gen
+SEQ_LENGTH=1000
+TEMPRATURE=0.3
 VLLM_HOST=http://localhost:8000
-SEQ_LENGTH=3000
-TEMPERATURE=0.9
 ```
 
 ### 5. Start the vLLM Server

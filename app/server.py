@@ -2,11 +2,15 @@ import os
 import subprocess
 import sys
 from dotenv import load_dotenv
+from pathlib import Path
 
 load_dotenv()
 
-MODEL_DIR = os.getenv("MODEL_DIR")
+model_dir_env = os.getenv("MODEL_DIR")
 MODEL_ID  = os.getenv("MODEL_ID")
+
+MODEL_DIR = Path(model_dir_env).expanduser().resolve()
+print(MODEL_DIR)
 
 if not MODEL_DIR or not MODEL_ID:
     raise ValueError("MODEL_DIR and MODEL_ID must be set in .env")
@@ -30,6 +34,7 @@ subprocess.run([
     "--served-model-name",  "mcq-gen",
     "--host",               "0.0.0.0",
     "--port",               "8000",
-    "--max-model-len",      "4096",
+    "--max-model-len",      "1000",
     "--dtype",              "auto",     # uses float16 on GPU, float32 on CPU
+    "--device",            "cpu",       # force CPU
 ])
