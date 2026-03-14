@@ -12,7 +12,7 @@ if HF_TOKEN:
     login(HF_TOKEN)
  
 MODEL_DIR   = os.getenv("MODEL_DIR")
-SEQ_LENGTH  = int(os.getenv("SEQ_LENGTH", 400))
+SEQ_LENGTH  = int(os.getenv("SEQ_LENGTH", 4000))
 TEMPERATURE = float(os.getenv("TEMPERATURE", 0.9))
  
 if not MODEL_DIR:
@@ -23,7 +23,7 @@ print(f"[inference] Loading model from '{MODEL_DIR}' on {device}...")
  
 tokenizer = AutoTokenizer.from_pretrained(MODEL_DIR, use_fast=False)
 model     = AutoModelForCausalLM.from_pretrained(MODEL_DIR)
-model.to(device)
+model.to(device)        #type: ignore
 model.eval()
  
 if tokenizer.pad_token is None:
@@ -31,14 +31,15 @@ if tokenizer.pad_token is None:
  
 print("[inference] Model loaded.")
  
-SYSTEM_PROMPT = """You are a Computer Science teacher. Generate hard multiple choice questions from the context given.
+SYSTEM_PROMPT = """You are a Computer Science teacher. Generate hard multiple choice questions with only 4 distractors or Options from the context given.
 Each MCQ must follow this format:
-Question: ...
-A. ...
-B. ...
-C. ...
-D. ...
-Answer: X
+Question: ...       \n
+A. ...      \n
+B. ...      \n
+C. ...      \n
+D. ...      \n
+
+Answer: X\n
 Ensure there is no repetition. Questions must be meaningful and test deep understanding."""
  
  
@@ -72,7 +73,7 @@ def generate_mcqs_from_text(user_prompt: str):
  
     def generate():
         with torch.inference_mode():
-            model.generate(**generation_kwargs)
+            model.generate(**generation_kwargs)     #type: ignore
  
     thread = threading.Thread(target=generate)
     thread.start()
