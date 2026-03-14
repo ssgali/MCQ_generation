@@ -2,13 +2,25 @@
 
 A **Streamlit-based chatbot interface** built on top of a **fine-tuned LLaMA 3.2 1B model**, designed to generate **high-quality multiple-choice questions (MCQs)** from user prompts and PDF documents. The model is fine-tuned specifically for **Computer Science education** and produces responses in a well-formatted, exam-style MCQ format.
 
-Inference is served locally via **vLLM**, replacing the previous `transformers`-based loading for faster and more efficient generation.
+---
+
+## Demo
+
+![MCQ Generator Demo](assets\demo.png)
+
+---
+
+## Branches
+
+| Branch | Description |
+|---|---|
+| `main` | vLLM-based inference — recommended for Linux/WSL with a supported GPU |
+| `transformers-version` | Transformers-based inference — simpler setup, works on Windows and CPU |
 
 ---
 
 ## Features
 
-- **vLLM-powered inference** for fast, optimized local serving with an OpenAI-compatible API.
 - **Locally hosted** — your data never leaves your machine.
 - **ChatGPT-like frontend using Streamlit** with a conversational UI.
 - **PDF upload support** — attach a document and generate MCQs based on its contents.
@@ -19,9 +31,10 @@ Inference is served locally via **vLLM**, replacing the previous `transformers`-
 
 ## Requirements
 
-- Linux or WSL (vLLM does not support native Windows)
-- Python 3.10+
+- Python 3.10 or 3.11
 - NVIDIA GPU with CUDA support (recommended, ~4GB+ VRAM for the 1B model)
+- Linux or WSL — **`main` branch only** (vLLM does not support native Windows)
+- Windows/Mac/Linux — **`transformers` branch** works anywhere
 
 ---
 
@@ -30,15 +43,21 @@ Inference is served locally via **vLLM**, replacing the previous `transformers`-
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/mcq-generator.git
-cd mcq-generator
+# vLLM version (main branch)
+git clone https://github.com/ssgali/MCQ_generation.git
+cd MCQ_generation
+
+# Transformers version
+git clone -b transformers https://github.com/ssgali/MCQ_generation.git
+cd MCQ_generation
 ```
 
 ### 2. Setup Virtual Environment
 
 ```bash
 python -m venv mcq_gen
-source mcq_gen/bin/activate
+source mcq_gen/bin/activate       # Linux/WSL
+# mcq_gen\Scripts\activate        # Windows
 ```
 
 ### 3. Install Requirements
@@ -57,36 +76,34 @@ cp .env.example .env
 
 ```env
 HF_TOKEN=your_huggingface_token_here
-MODEL_DIR=model\llama-3.2-1b-mcq-gen
 MODEL_ID=sinister007/llama-3.2-1B-mcq-gen-finetuned
-SEQ_LENGTH=1000
-TEMPRATURE=0.3
+MODEL_DIR=model/llama-3.2-1b-mcq-gen
+SEQ_LENGTH=3000
+TEMPERATURE=0.9
+
+# main branch (vLLM) only
 VLLM_HOST=http://localhost:8000
 ```
 
-### 5. Start the vLLM Server
+### 5. Run the App
 
-Open a terminal and run:
+**`main` branch (vLLM)** — two terminals needed:
 
 ```bash
+# Terminal 1 — start the inference server
 python serve.py
+
+# Terminal 2 — start the frontend (once you see "Application startup complete")
+streamlit run main.py
 ```
 
-On first run this will download the model from HuggingFace and save it to `MODEL_DIR`. On all subsequent runs it will load directly from the local folder.
-
-Wait until you see:
-
-```
-INFO: Application startup complete.
-```
-
-### 6. Start the Streamlit Frontend
-
-Open a second terminal and run:
+**`transformers` branch** — one terminal:
 
 ```bash
 streamlit run main.py
 ```
+
+On first run the model will be downloaded from HuggingFace and saved to `MODEL_DIR`. All subsequent runs load from the local folder.
 
 ---
 
@@ -94,14 +111,34 @@ streamlit run main.py
 
 ```
 .
-├── serve.py             # Starts the vLLM inference server
-├── main.py              # Streamlit frontend
-├── inference.py         # Queries the vLLM server, handles streaming
-├── text_extracter.py    # PDF text extraction
-├── download_model.py    # Downloads and saves model from HuggingFace
-├── requirements.txt
-├── .env.example         # Environment variable template
-└── Other Scripts/       # Training and dataset notebooks (not needed for inference)
+|-- Notebooks
+|   |-- Model_Infer.ipynb
+|   |-- dataset.ipynb
+|   `-- finetuning.ipynb
+|-- README.md
+|-- Sample PDF
+|   `-- Sample.pdf
+|-- app
+|   |-- inference.py
+|   |-- main.py
+|   `-- text_extracter.py
+|-- assets
+|   `-- demo.png
+|-- mcq_gen
+|-- model
+|   `-- llama-3.2-1b-mcq-gen
+|       |-- chat_template.jinja
+|       |-- config.json
+|       |-- generation_config.json
+|       |-- model.safetensors
+|       |-- tokenizer.json
+|       `-- tokenizer_config.json
+|-- requirements.txt
+|-- scripts
+|   `-- download_model.py
+`-- training
+    |-- multi_gpu_training_script.py
+    `-- train_script.py
 ```
 
 ---
@@ -133,7 +170,8 @@ Answer: X
 
 ## Roadmap
 
-- Further fine-tune the model on a richer, domain-specific dataset.
+- Fine-tune on a larger, richer domain-specific dataset for improved accuracy.
+- Improve distractor quality — generate more plausible and challenging wrong answer choices.
 - Integrate retrieval-based augmentation (RAG) for better handling of large PDFs.
 - Add support for answer explanations and difficulty tagging.
 - Export MCQs as JSON or PDF.
